@@ -26,5 +26,20 @@ pipeline {
         }
       }
     }
+
+    stage('Maven Build') {
+      steps {
+          sh 'mvn clean install'
+          }
+      post {
+        failure {
+          echo 'Maven jar build failure'
+        }
+        success {
+          echo 'Maven jar build success'  
+        }
+      }
+    }
+
   }
 }
