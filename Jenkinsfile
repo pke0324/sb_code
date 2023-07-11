@@ -40,6 +40,22 @@ pipeline {
         }
       }
     }
+    
+    stage('Docker Image Build') {
+      steps {
+          sh "docker build -t ${dockerHubRegistry}:${currentBuild.number} ."
+          sh "docker build -t ${dockerHubRegistry}:latest ."
+          }
+      post {
+        failure {
+          echo 'Docker image build failure'
+        }
+        success {
+          echo 'Docker image build success'  
+        }
+      }
+    }
+
 
   }
 }
