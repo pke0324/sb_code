@@ -56,6 +56,30 @@ pipeline {
       }
     }
 
+    stage('Docker Image Push') {
+      steps {
+          
+          
+            sh "docker push ${dockerHubRegistry}:${currentBuild.number}"
+            sh "docker push ${dockerHubRegistry}:latest"
+            
+      }
+      post {
+
+        failure {
+          echo 'Docker Image Push failure'
+          sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+          sh "docker rmi ${dockerHubRegistry}:latest"
+        }
+        success {
+          echo 'Docker Image Push success'
+          sh "docker rmi ${dockerHubRegistry}:${currentBuild.number}"
+          sh "docker rmi ${dockerHubRegistry}:latest"
+        }
+      }
+    }
+
+
 
   }
 }
