@@ -78,6 +78,21 @@ pipeline {
         }
       }
     }
+    stage('Docker Container Deploy') {
+      steps {
+          sh "docker rm -f spring"
+          sh "docker run -dp 7979:8085 --name spring ${dockerHubRegistry}:${currentBuild.number}"
+          }
+      post {
+        failure {
+          echo 'Container Deploy failure'
+        }
+        success {
+          echo 'Container Deploy success'
+        }
+      }
+    }
+
 
 
 
